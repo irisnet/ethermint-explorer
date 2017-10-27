@@ -1,0 +1,40 @@
+extends layout
+
+block content
+    div.center.recent_blocks
+        div.title #{language[0].title}
+        div.btnRed #{language[0].btnRed}
+        div.title_list.title_list_flex
+            for item in language[0].list
+                div #{item}
+        div
+            for block in blocks
+                div.title_list_warp.title_list_flex
+                    div
+                        a(href="/block/" + block.number) #{block.number}
+                    div
+                        a(href="/account/" + block.author) #{nameformatter.format(block.author)}
+                    div  #{moment.unix(block.timestamp).format()}
+                    div  #{block.transactions.length}
+
+    div.center.recent_blocks.recent_transactions
+        div.title #{language[1].title}
+        if txs.length === 0
+            p.recent_transactions_p #{language[1].zero}
+        else
+            div.title_list.title_list_flex
+                for item in language[1].list
+                    div #{item}
+            for tx in txs
+                div.title_list_warp.title_list_flex
+                    div
+                        a(href="/tx/" + tx.hash) #{tx.hash.substr(0, 10)}...
+                    div
+                        a(href="/account/" + tx.from) #{nameformatter.format(tx.from)}
+                    div
+                        if tx.to
+                            a(href="/account/" + tx.to) #{nameformatter.format(tx.to)}
+                        else
+                            #{language[1].Amount}
+                    div  #{ethformatter(tx.value)}
+

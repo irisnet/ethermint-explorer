@@ -1,0 +1,37 @@
+{
+  "name": "etherchain-light",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "gulp",
+    "dev": "gulp"
+  },
+  "dependencies": {
+    "async": "^2.1.5",
+    "bignumber.js": "^4.1.0",
+    "body-parser": "~1.16.0",
+    "browser-sync": "^2.18.13",
+    "cookie-parser": "~1.4.3",
+    "debug": "^2.6.9",
+    "i18n": "~0.8.3",
+    "ethereumjs-abi": "git+https://github.com/gobitfly/ethereumjs-abi.git",
+    "ethereumjs-util": "^5.1.1",
+    "express": "~4.14.1",
+    "gulp": "^3.9.1",
+    "gulp-nodemon": "^2.2.1",
+    "level": "^1.6.0",
+    "leveldown": "^1.9.0",
+    "levelup": "^1.3.5",
+    "moment": "^2.17.1",
+    "morgan": "~1.7.0",
+    "ms": "^0.7.3",
+    "numeral": "^2.0.4",
+    "pug": "^2.0.0-rc.4",
+    "serve-favicon": "~2.3.2",
+    "solc": "^0.4.17",
+    "string-similarity": "^1.1.0",
+    "tmp": "0.0.31",
+    "web3": "git+https://github.com/ethereum/web3.js.git",
+    "yargs": "^7.0.1"
+  }
+}

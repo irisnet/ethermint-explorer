@@ -1,0 +1,93 @@
+extends layout
+
+block content
+    div.center.recent_blocks.block
+        div.title #{language[0].title}  #{block.number }
+        div.btn_div
+            a(href="/block/" + (block.number + 1)).btnBlue #{language[0].btn[1]}
+            a(href="/block/" + (block.number - 1)).btnBlue #{language[0].btn[0]}
+        div.block_list
+            div #{language[0].list[0]}:
+            div #{block.hash}
+        div.block_list
+            div #{language[0].list[1]}:
+            div
+                a(href="/block/" + block.parentHash) #{block.parentHash}
+        div.block_list
+            div #{language[0].list[2]}:
+            div
+                a(href="/account/" + block.author) #{nameformatter.format(block.author)}
+        div.block_list
+            div #{language[0].list[3]}:
+            div #{numeral(block.gasLimit).format()}
+        div.block_list
+            div #{language[0].list[4]}:
+            div #{numeral(block.gasUsed).format()}
+        div.block_list
+            div #{language[0].list[5]}:
+            div #{numeral(block.difficulty).format()}
+        div.block_list
+            div #{language[0].list[6]}:
+            div #{numeral(block.totalDifficulty).format()}
+        div.block_list
+            div #{language[0].list[7]}:
+            div #{moment.unix(block.timestamp).format()} (#{moment.unix(block.timestamp).fromNow()})
+        div.block_list
+            div #{language[0].list[8]}:
+            div #{numeral(block.size).format()}
+        div.block_list
+            div #{language[0].list[9]}:
+            div #{block.transactions.length}
+
+
+        div.title.block_title.recent_transactions #{language[1].title}:
+        if block.transactions.length === 0
+            p.recent_transactions_p #{language[1].zero}
+        else
+            div.title_list.title_list_flex
+                for item in language[1].list
+                    div #{item}
+            for tx in block.transactions
+                div.title_list_warp.title_list_flex#title_list_flex
+                    div
+                        if tx.error
+                            img.error(src='/img/error.png',onmouseover="errorShow(this)",onmouseout="errorHide(this)")
+                            div.toolTips
+                                div.triangle-left
+                                div.toolTips_txt #{language[1].toolTips_txt}
+                        a(href="/tx/" + tx.hash)  #{tx.hash.substr(0, 10)}...
+                    div.capitalize Tx
+                    div
+                        a(href="/account/" + tx.from) #{nameformatter.format(tx.from)}
+                    div
+                        if tx.to
+                            a(href="/account/" + tx.to) #{nameformatter.format(tx.to)}
+                        else
+                            | New Contract
+                    div #{ethformatter(tx.value)}
+
+                for trace in tx.traces
+                    div.title_list_warp.title_list_flex.traces
+                        div
+                            img(src='/img/arrow_right.jpg')
+
+                        div #{trace.type}
+                        if trace.type === "call"
+                            div
+                                a(href="/account/" + trace.action.from) #{nameformatter.format(trace.action.from)}
+                            div
+                                a(href="/account/" + trace.action.to) #{nameformatter.format(trace.action.to)}
+                            div #{ethformatter(trace.action.value)}
+                        else if trace.type === "create"
+                            div
+                                a(href="/account/" + trace.action.from) #{nameformatter.format(trace.action.from)}
+                            div
+                                a(href="/account/" + trace.result.address) #{nameformatter.format(trace.result.address)}
+                            div #{ethformatter(trace.action.value)}
+                        else if trace.type === "suicide"
+                            div
+                                a(href="/account/" + trace.action.from) #{nameformatter.format(trace.action.from)}
+                            div
+                                a(href="/account/" + trace.action.refundAddress) #{nameformatter.format(trace.action.refundAddress)}
+                            div #{ethformatter(trace.action.balance)}
+

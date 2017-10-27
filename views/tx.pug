@@ -1,0 +1,88 @@
+extends layout
+
+block content
+    div.center.recent_blocks.block.tx
+        div.title #{language[0].title} #{tx.hash.substr(0, 7)}...
+        div.block_list
+            div #{language[0].list[0]}:
+            div
+                a(href="/tx/" + tx.hash) #{tx.hash}
+        div.block_list
+            div #{language[0].list[1]}:
+            div
+                a(href="/block/" + tx.blockHash) #{tx.blockHash}
+        div.block_list
+            div #{language[0].list[2]}:
+            div
+                a(href="/block/" + tx.blockNumber) #{tx.blockNumber}
+        div.block_list
+            div #{language[0].list[3]}:
+            div
+                a(href="/account/" + tx.from) #{nameformatter.format(tx.from)}
+        div.block_list
+            div #{language[0].list[4]}:
+            div
+                if tx.to
+                    a(href="/account/" + tx.to) #{nameformatter.format(tx.to)}
+                else
+                    | #{language[0].txt}
+        div.block_list
+            div #{language[0].list[5]}:
+            div #{ethformatter(tx.value)}
+        div.block_list
+            div #{language[0].list[6]}:
+            div #{tx.nonce}
+        div.block_list
+            div #{language[0].list[7]}:
+            div #{tx.gas}
+        div.block_list
+            div #{language[0].list[8]}:
+            div #{tx.gasUsed}
+        div.block_list
+            div #{language[0].list[9]}:
+            div #{ethformatter(tx.gasPrice)}
+        div.block_list
+            div #{language[0].list[10]}:
+            div #{ethformatter(tx.gasUsed * tx.gasPrice)}
+        div.block_list.br_none
+            div #{language[0].list[11]}:
+            div
+                pre #{tx.input}
+
+        div.title.block_title.recent_transactions #{language[1].title}
+            a.Raw_Trace(href="/tx/raw/" + tx.hash) #{language[1].a}
+        div.title_list.title_list_flex
+            for item in language[1].list
+                div #{item}
+        for trace in tx.traces
+            div.title_list_warp.title_list_flex
+                div.tx_list
+                    div.capitalize #{trace.type}
+                    if trace.error
+                        div
+                            img.error(src='/img/error.png',onmouseover="errorShow(this)",onmouseout="errorHide(this)")
+                            div.toolTips(style="margin-left: 20px;")
+                                div.triangle-left
+                                div.toolTips_txt Bad instruction
+                if trace.type === "call"
+                    div
+                        a(href="/account/" + trace.action.from) #{nameformatter.format(trace.action.from)}
+                    div
+                        a(href="/account/" + trace.action.to) #{nameformatter.format(trace.action.to)}
+                    div #{ethformatter(trace.action.value)}
+                else if trace.type === "create"
+                    div
+                        a(href="/account/" + trace.action.from) #{nameformatter.format(trace.action.from)}
+                    div
+                        if trace.result
+                            a(href="/account/" + trace.result.address) #{nameformatter.format(trace.result.address)}
+                        else
+                            div #{'-'}
+                    div #{ethformatter(trace.action.value)}
+                else if trace.type === "suicide"
+                    div
+                        a(href="/account/" + trace.action.address) #{nameformatter.format(trace.action.address)}
+                    div
+                        a(href="/account/" + trace.action.refundAddress) #{nameformatter.format(trace.action.refundAddress)}
+                    div #{ethformatter(trace.action.balance)}
+

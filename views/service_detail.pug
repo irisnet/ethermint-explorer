@@ -1,0 +1,119 @@
+extends layout
+
+block content
+    div.center.recent_blocks.service.service_detail
+        div.title.title1 #{language[0].title}
+        div(style='margin-top: 28px;').service_definition
+            div #{language[0].detail[0]}
+            div #{model.svc_cd}
+            div #{language[0].detail[1]}
+            div #{model.svc_name}
+        div.service_definition
+            div #{language[0].detail[2]}
+            div
+                a(href="#") #{model.auth}
+            div #{language[0].detail[3]}
+            div #{model.block_type}
+        div.service_definition
+            div #{language[0].detail[4]}
+            div #{model.auth}
+            div #{language[0].detail[5]}
+            div #{model.createtime}
+        div.service_definition
+            div #{language[0].detail[6]}
+            div #{model.github}
+            div #{language[0].detail[7]}
+            div #{model.updatetime}
+        div.title.title1.title2 #{language[0].service_binding_title}
+            if(!model.svc_bind.createtime)
+                div.btnRed#create_service #{language[0].service_binding_btnRed}
+            else
+                div.btnRed_blue#edit_service EDIT
+                    img(src="../../img/detail-update.png")
+        if(model.svc_bind.createtime)
+            div(style='margin-top: 28px;').service_definition
+                div #{language[0].service_binding_List[0]}
+                div #{model.svc_bind.block_type}
+                div #{language[0].service_binding_List[1]}
+                div
+                    a(href="#") #{model.svc_bind.block_type}
+            div(style='margin-top: 28px;').service_definition
+                div #{language[0].service_binding_List[2]}
+                div #{model.svc_bind.action}
+                div #{language[0].service_binding_List[3]}
+                div #{model.svc_bind.fee}
+            div(style='margin-top: 28px;').service_definition
+                div #{language[0].service_binding_List[4]}
+                div #{model.svc_bind.createtime}
+                div #{language[0].service_binding_List[5]}
+                div #{model.svc_bind.updatetime}
+
+
+
+        div.title.title2.title1 #{language[0].Definition}
+        pre(readonly="readonly") #{model.description}
+        div.modal#create
+            div.modal-dialog
+                div.modal-head #{language[0].create_title}
+                    img(src='../../img/close.png').modal-close
+                div(style='margin-top: 32px;').model-warp
+                    div #{language[0].create_list[0]}
+                        span.red *
+                    div
+                        input(type=text,readonly,value=model.id)
+                div.model-warp
+                    div #{language[0].create_list[1]}
+                        span.red *
+                    div
+                        input(type=text,readonly,value='0x' + model.def_addr)
+                div.model-warp
+                    div #{language[0].create_list[2]}
+                        span.red *
+                    div
+                        input(type=text)#service_detail_create_amount
+                //div.model-warp
+                //    div Private Key
+                //        span.red *
+                //    div
+                //        input(type=text)
+
+                div.model-btn
+                    div.save
+                        img(src='../..//img/save.png')
+                        span #{language[0].btn[0]}
+                    div.cancel #{language[0].btn[1]}
+        div.modal#edit
+            div.modal-dialog
+                div.modal-head #{language[0].edit_title}
+                    img(src='../../img/close.png').modal-close
+                div(style='margin-top: 32px;').model-warp
+                    div #{language[0].edit_list[0]}
+                        span.red *
+                    div
+                        input(type=text,readonly,value=model.id)
+                div.model-warp
+                    div #{language[0].edit_list[1]}
+                        span.red *
+                    div
+                        select#service_detail_edit_bind
+                            option Bind
+                            option Unbind
+                div.model-warp
+                    div #{language[0].edit_list[2]}
+                        span.red *
+                    div
+                        input(type=text)#service_detail_edit_amount
+                //div.model-warp
+                //    div Private Key
+                //        span.red *
+                //    div
+                //        input(type=text)
+
+                div.model-btn
+                    div.save
+                        img(src='../../img/save.png')
+                        span #{language[0].btn[0]}
+                    div.cancel #{language[0].btn[1]}
+        script(src='../../javascripts/jquery-1.8.3.min.js')
+        script(src='../../javascripts/service_detail.js')
+

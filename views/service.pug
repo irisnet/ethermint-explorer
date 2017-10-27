@@ -1,0 +1,65 @@
+extends layout
+
+block content
+    div.center.recent_blocks.service
+        div.title #{language[0].title}
+        div.btnRed#create_service #{language[0].btnRed}
+        div.title_list.title_list_flex
+            for item in language[0].list
+                div #{item}
+        div#page
+        div.M-box2
+        div.modal#create
+            div.modal-dialog
+                div.modal-head #{language[0].create[7]}
+                    img(src='./img/close.png').modal-close
+                div(style='margin-top: 32px;').model-warp
+                    div #{language[0].create[0]}
+                        span.red *
+                    div
+                        input(type=text)
+                div.model-warp
+                    div #{language[0].create[1]}
+                        span.red *
+                    div
+                        input(type=text)
+                div.model-warp
+                    div #{language[0].create[2]}
+                        span.red *
+                    div
+                        input(type=text)
+                div.model-warp
+                    div #{language[0].create[3]}
+                        span.red *
+                    div
+                        input(type=text)
+
+                //div.model-warp
+                //    div #{language[0].create[4]}
+                //        span.red *
+                //    div
+                //        input(type=text)
+                div.model-warp
+                    div #{language[0].create[5]}
+                        span(style='visibility: hidden;').red *
+                    div
+                        input(type=text)
+                div.model-warp
+                    div #{language[0].create[6]}
+                        span.red *
+                    div.textarea
+                        textarea
+                div.model-btn
+                    div.save
+                        img(src='./img/save.png')
+                        span #{language[0].create[9]}
+                    div.cancel #{language[0].create[8]}
+
+
+    script(src='../javascripts/jquery-1.8.3.min.js')
+    script(src='../javascripts/jquery.pagination.js')
+    script(src='../javascripts/service.js')
+
+
+
+
