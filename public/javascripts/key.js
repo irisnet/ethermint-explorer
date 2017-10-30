@@ -1,7 +1,7 @@
 /**
  * Created by vincent on 2017/10/27.
  */
-const DECRYPT_MODE = 16;
+const DECRYPT_MODE = 2;
 var password = '1234';
 data = {
     "address": "7eff122b94897ea5b0e2a9abf47b86337fafebdc",
