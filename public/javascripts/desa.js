@@ -1,8 +1,7 @@
 /**
  * Created by vincent on 2017/10/20.
  */
-var elliptic = require('elliptic');
-var keythereum = require("keythereum");
+// var elliptic = require('elliptic'); // Node.js
 var EC = elliptic.ec;
 var ec = new EC('secp256k1');
 
@@ -31,9 +30,3 @@ function getPubFromPrivate(privateKey) {
     var key = ec.keyFromPrivate(privateKey, "hex");
     return key.getPublic('hex')
 }
-
-
-
-var datadir = "./";
-var keyObject = keythereum.importFromFile("0x7eff122b94897ea5b0e2a9abf47b86337fafebdc", datadir);
-console.log(keyObject);
