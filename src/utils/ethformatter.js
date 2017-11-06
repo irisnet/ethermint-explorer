@@ -7,4 +7,4 @@ function formatAmount(amount) {
 
     return ret.dividedBy(Ether) + " ETH";
 }
-module.exports = formatAmount;
+export default formatAmount;

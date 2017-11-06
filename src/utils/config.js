@@ -38,4 +38,4 @@ var config = function () {
 
 }
 
-module.exports = config;
+export default config;

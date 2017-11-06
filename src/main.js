@@ -8,15 +8,17 @@ import VueI18n from 'vue-i18n'
 import numeral from "numeral"
 import moment from "moment"
 import ethformatter from "./utils/ethformatter.js"
-
-var config = new (require('./utils/config'))();
-Vue.prototype.nameformatter = new (require('./utils/nameformatter.js'))(config);
+import utilsConfig from './utils/config'
+import utilsNameformatter from './utils/nameformatter.js'
+import utilsService from './utils/service.js'
+var config = new (utilsConfig)();
+Vue.prototype.nameformatter = new (utilsNameformatter)(config);
 Vue.prototype.moment = moment;
 Vue.prototype.ethformatter = ethformatter;
 Vue.prototype.numeral = numeral;
 Vue.prototype.web3 = new web3();
 Vue.prototype.web3.setProvider(new web3.providers.HttpProvider("http://10.10.0.1:8546"));
-Vue.prototype.service = new (require('./utils/service.js'))(Vue.prototype.web3);
+Vue.prototype.service = new (utilsService)(Vue.prototype.web3);
 import {Pagination} from 'element-ui'
 
 Vue.use(Pagination)

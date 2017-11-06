@@ -316,4 +316,4 @@ function Service(web3) {
     return web3.personal.unlockAccount(web3.eth.accounts[0], '1234');
   };
 }
-module.exports = Service;
+export default  Service;

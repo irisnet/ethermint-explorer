@@ -10,4 +10,4 @@ function nameFormatter(config) {
         }
     }
 }
-module.exports = nameFormatter;
+export default  nameFormatter;
