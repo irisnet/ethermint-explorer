@@ -1,11 +1,6 @@
 var Web3 = require('web3');
-// var util = require("ethereumjs-util");
-var Wallet = require('./wallet');
-
-const httpUri = "http://10.10.0.1:8545";
-
+const httpUri = "http://10.10.0.1:8546";
 const web3 = new Web3(new Web3.providers.HttpProvider(httpUri));
-var fileContent = '{"address":"7eff122b94897ea5b0e2a9abf47b86337fafebdc","crypto":{"cipher":"aes-128-ctr","ciphertext":"19de8a919e2f4cbdde2b7352ebd0be8ead2c87db35fc8e4c9acaf74aaaa57dad","cipherparams":{"iv":"ba2bd370d6c9d5845e92fbc6f951c792"},"kdf":"scrypt","kdfparams":{"dklen":32,"n":262144,"p":1,"r":8,"salt":"c7cc2380a96adc9eb31d20bd8d8a7827199e8b16889582c0b9089da6a9f58e84"},"mac":"ff2c0caf051ca15d8c43b6f321ec10bd99bd654ddcf12dd1a28f730cc3c13730"},"id":"f86a62b4-0621-4616-99af-c4b7f38fcc48","version":3}';
 const myContract = web3.eth.contract([{
   "constant": false,
   "inputs": [{"name": "bind_addr", "type": "address"}],
@@ -156,41 +151,20 @@ const myContract = web3.eth.contract([{
   "type": "event"
 }]);
 
-
-// var contractInstance = myContract.at('0xe45f951ee7e577a6a821ed9d377cf4a9eec57934');
 const contractInstance = myContract.at('0x6ddba2e46bd3b051fcf124e97e42f52d31a57cf4');
-var _svc_cd = "BJ00";
-var _svc_name = "测试服务";
-var _description = "测试";
-var _svc_def_type = "type001";
-var _github = "xxxx3";
-var _svc_def = "xxxx1";
 
-
-var _auth = "*";
-var _block_type = "ethereum";
-// console.log(myContract);
-// var code = myContract.method.svc_def(_svc_cd, _svc_def_type, _svc_def, _auth, _github, _block_type, _svc_name, _description).encodeABI();
-// console.log(code);
-var wallet = Wallet.getWalletFromPrivKeyFile(fileContent, '1234');
-var ethUtil = require('ethereumjs-util');
-console.log("Address :", ethUtil.bufferToHex(wallet.getAddress()));
-console.log("PrivateKey :", bytesToHex(wallet.getPrivateKey()));
-console.log("PublicKey :", bytesToHex(wallet.getPublicKey()));
-// var privateKey = "0ce9f0b80483fbae111ac7df48527d443594a902b00fc797856e35eb7b12b4be";
-// var getData = contractInstance.svc_def.getData(_svc_cd, _svc_def_type, _svc_def, _auth, _github, _block_type, _svc_name, _description);
-// var result  = util.ecsign(Buffer.from(getData,"hex"),Buffer.from(privateKey,"hex"));
-//
-// const def_events = contractInstance.evt_svc_def([{fromBlock: 0, toBlock: 'latest'}]);
-// const bind_events = contractInstance.evt_svc_bind([{fromBlock: 0, toBlock: 'latest'}]);
-// const evt_svc_bind_update = contractInstance.evt_svc_bind_update([{fromBlock: 0, toBlock: 'latest'}]);
+const def_events = contractInstance.evt_svc_def([{fromBlock: 0, toBlock: 'latest'}]);
+const bind_events = contractInstance.evt_svc_bind([{fromBlock: 0, toBlock: 'latest'}]);
+const evt_svc_bind_update = contractInstance.evt_svc_bind_update([{fromBlock: 0, toBlock: 'latest'}]);
 
 // var events = contractInstance.allEvents({fromBlock: 0, toBlock: 'latest'});
-// events.watch(function(error, result){
-//     console.log("result", result);
-//     var tx = web3.eth.getTransaction(result.transactionHash);
-//     console.log(tx);
+//
+// events.watch(function (error, result) {
+//   console.log("result", result);
+//   var tx = web3.eth.getTransaction(result.transactionHash);
+//   console.log(tx);
 // });
+
 
 const gas_limit = 4300000;
 
@@ -351,13 +325,5 @@ Service.prototype.get_svc_bind_by_id = function get_svc_bind_by_id(id) {
 Service.prototype.unlockAccount = function unlockAccount() {
   return web3.personal.unlockAccount(web3.eth.accounts[0], '1234');
 };
-
-function bytesToHex(bytes) {
-  for (var hex = [], i = 0; i < bytes.length; i++) {
-    hex.push((bytes[i] >>> 4).toString(16));
-    hex.push((bytes[i] & 0xF).toString(16));
-  }
-  return hex.join("");
-}
 
 module.exports = Service;
