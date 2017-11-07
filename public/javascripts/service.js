@@ -1,6 +1,8 @@
 var Web3 = require('web3');
 const httpUri = "http://10.10.0.1:8546";
 const web3 = new Web3(new Web3.providers.HttpProvider(httpUri));
+var Transaction = require("./transaction");
+var transaction = new Transaction();
 const myContract = web3.eth.contract([{
   "constant": false,
   "inputs": [{"name": "bind_addr", "type": "address"}],
@@ -183,12 +185,20 @@ function Service() {
  * @param _svc_name
  * @param _description
  */
-Service.prototype.svc_def = function (_svc_cd, _svc_def_type, _svc_def, _auth, _github, _block_type, _svc_name, _description) {
+Service.prototype.svc_def = function (wallet, _svc_cd, _svc_def_type, _svc_def, _auth, _github, _block_type, _svc_name, _description) {
   return new Promise(function (resolve, reject) {
-      contractInstance.svc_def(_svc_cd, _svc_def_type, _svc_def, _auth, _github, _block_type, _svc_name, _description, {
-        from: web3.eth.accounts[0],
-        gas: gas_limit
-      }, function (error, result) {
+      var data = contractInstance.svc_def.getData(_svc_cd, _svc_def_type, _svc_def, _auth, _github, _block_type, _svc_name, _description);
+      var rawTx = {
+        nonce: transaction.getNonce(web3, wallet),
+        gasPrice: 20000000000,
+        gasLimit: 4300000,
+        to: '0x6ddba2e46bd3b051fcf124e97e42f52d31a57cf4',
+        value: 0,
+        data: data.toString("hex")
+      }
+      var rowTx = transaction.signTX(wallet, rawTx);
+      var serializedTx = rowTx.toString("hex");
+      web3.eth.sendRawTransaction('0x' + serializedTx, function (error, result) {
         if (!error) {
           // watch for changes
           def_events.watch(function (error, event) {

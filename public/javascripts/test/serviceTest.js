@@ -2,7 +2,6 @@
  * Created by vincent on 2017/11/6.
  */
 var Web3 = require('web3');
-// var util = require("ethereumjs-util");
 var Wallet = require('../wallet');
 var Transaction = require("../transaction");
 var transaction = new Transaction();
@@ -163,7 +162,7 @@ const myContract = web3.eth.contract([{
 
 const contractInstance = myContract.at('0x6ddba2e46bd3b051fcf124e97e42f52d31a57cf4');
 
-var _svc_cd = "BJ00001";
+var _svc_cd = "BJ000008";
 var _svc_name = "测试服务";
 var _description = "测试";
 var _svc_def_type = "type001";
@@ -179,52 +178,58 @@ var ethUtil = require('ethereumjs-util');
 console.log("Address :", ethUtil.bufferToHex(wallet.getAddress()));
 console.log("PrivateKey :", wallet.getPrivateKey().toString("hex"));
 console.log("PublicKey :", wallet.getPublicKey().toString("hex"));
-var privateKey = "0x0ce9f0b80483fbae111ac7df48527d443594a902b00fc797856e35eb7b12b4be";
 var getData = contractInstance.svc_def.getData(_svc_cd, _svc_def_type, _svc_def, _auth, _github, _block_type, _svc_name, _description);
-console.log(getData.toString("hex"));
+console.log("getData ", getData.toString("hex"));
 
 var rawTx = {
-  gasPrice: '0x09184e72a000',
+  nonce: transaction.getNonce(web3, wallet),
+  gasPrice: 20000000000,
   gasLimit: 4300000,
   to: '0x6ddba2e46bd3b051fcf124e97e42f52d31a57cf4',
-  value: '0x00',
+  value: 0,
   data: getData.toString("hex")
 }
-
+//
 var rowTx = transaction.signTX(wallet, rawTx);
-console.log(rowTx.toString("hex"));
-web3.eth.sendRawTransaction('0x' + rowTx, function (err, hash) {
-  if (!err)
-    console.log(hash); // "0x7f9fade1c0d57a7af66ab4ead79fade1c0d57a7af66ab4ead7c2c2eb7b11a91385"
-});
+var serializedTx = rowTx.toString("hex");
 
-
-var events = contractInstance.allEvents({fromBlock: 0, toBlock: 'latest'});
-const def_events = contractInstance.evt_svc_def([{fromBlock: 0, toBlock: 'latest'}]);
-
-events.watch(function (error, result) {
-  if (!error) {
-    console.log("result", result);
-    var svc_id = '-1';
-    if(result.args.svc_id) {
-      svc_id = result.args.svc_id.toString(10);
-    }
-    if (svc_id === '0') {
-      console.log("service code already exists");
-    } else {
-      console.log(svc_id);
-    }
-  } else {
-    console.log(error);
-  }
-});
+var def_events = contractInstance.evt_svc_def([{fromBlock: 0, toBlock: 'latest'}]);
 
 def_events.watch(function (error, event) {
   if (!error) {
-    console.log("defResult", result);
+    var svc_id = event.args.svc_id.toString(10);
+    console.log("defResult", svc_id);
   } else {
     console.log(error)
   }
 });
 
+// web3.eth.sendRawTransaction('0x' + serializedTx, function (err, hash) {
+//   if (!err)
+//     console.log(hash); // "0x7f9fade1c0d57a7af66ab4ead79fade1c0d57a7af66ab4ead7c2c2eb7b11a91385"
+// });
+
+var Service = require("../service");
+var service = new Service();
+
+test_svc_def(10000)
+function test_svc_def(i) {
+  var _svc_cd = "BJ00" + i;
+  var _svc_name = "测试服务";
+  var _description = "测试";
+  var _svc_def_type = "type001";
+  var _github = "xxxx3";
+  var _svc_def = "xxxx1";
+
+
+  var _auth = "*";
+  var _block_type = "ethereum";
+
+  service.svc_def(wallet, _svc_cd, _svc_def_type, _svc_def, _auth, _github, _block_type, _svc_name, _description)
+    .then(function (val) {
+      console.log('val', val);
+    }, function (error) {
+      console.log('error', error);
+    });
+}
 
