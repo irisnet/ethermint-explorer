@@ -14,8 +14,10 @@ const service = new Service();
 
 const i = 2;
 // defineServiceTest(i);
-// let svcDef = service.getSvcDef(i);
-// console.log(svcDef);
+let svcDef = service.getSvcDef(i);
+console.log(svcDef);
+let svcDefList = service.getSvcDefList(2,1);
+console.log(svcDefList);
 // bindServiceTest(i);
 // let svcBind = service.getSvcBind(i);
 // console.log(svcBind);

@@ -168,8 +168,40 @@ Service.prototype.updateSvcBind = function updateSvcBind(wallet, svcId, bindStat
  * @returns {*}
  */
 Service.prototype.getSvcDef = function getSvcDef(svcId) {
-  return contractInstance.getSvcDef.call(svcId);
+  let arry = contractInstance.getSvcDef.call(svcId);
+  return {
+    addr: arry[0],
+    cd: arry[1],
+    name: arry[2],
+    desc: arry[3],
+    defType: arry[4],
+    def: arry[5],
+    github: arry[6],
+    createtime: arry[7].toString(10)
+  };
 };
+/**
+ * get Service Define List
+ * @param skip 跳过的数据项个数
+ * @param limit 获取的数据项个数
+ * @returns {*}
+ */
+Service.prototype.getSvcDefList = function getSvcDefList(skip, limit) {
+  let total = this.getLatestSvcId().toString(10);
+  let data = [];
+  if (skip >= total) {
+    return {total: total, data: data};
+  }
+  let last = skip + limit;
+  if (last > total) {
+    last = total;
+  }
+  for (let i = skip; i < last; i++) {
+    data.push(this.getSvcDef(i + 1));
+  }
+  return {total: total, data: data};
+};
+
 
 /**
  * get Service Binding
@@ -177,14 +209,25 @@ Service.prototype.getSvcDef = function getSvcDef(svcId) {
  * @returns {*}
  */
 Service.prototype.getSvcBind = function getSvcBind(svcId) {
-  return contractInstance.getSvcBind.call(svcId);
+  let arry = contractInstance.getSvcBind.call(svcId);
+  return {
+    addr: arry[0],
+    state: arry[1].toString(10),
+    auth: arry[2],
+    fee: arry[3].toString(10),
+    publicKey: arry[4],
+    createtime: arry[5].toString(10),
+    updatetime: arry[6].toString(10)
+  }
 };
 
 /**
- *  unlock account
+ * get Latest Service Id
+ * @returns {*}
  */
-Service.prototype.unlockAccount = function unlockAccount() {
-  return web3.personal.unlockAccount(web3.eth.accounts[0], '1234');
+Service.prototype.getLatestSvcId = function getLatestSvcId() {
+  return contractInstance.getLatestSvcId.call();
 };
+
 
 module.exports = Service;
