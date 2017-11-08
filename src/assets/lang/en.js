@@ -124,9 +124,9 @@ export const  message = {
           "Name",
           "Pubilisher",
           "Type",
-          "Scope",
+
           "Create Time",
-          "Updated Time"
+
         ],
         "btnRed": "Create a New Service Definition",
         "create": [
@@ -134,12 +134,16 @@ export const  message = {
           "Service Name",
           "Service Description",
           "Service Type",
-          "Private Key",
+          "Github",
+          "Gas Limit",
+          "Gas Preice",
           "Github",
           "Service Definition",
+        ],
+        "createList":[
           "Create or Edit New Service Definition",
           "Cancel",
-          "Save"
+          "Save",
         ]
       }
     ],
@@ -172,7 +176,8 @@ export const  message = {
           "Difinition ID",
           "Service Address",
           "Amount",
-          "Private Key"
+          "Gas Limit",
+          "Gas Preice"
         ],
         "create_title":"Create a New Service Binding",
         "btn": [
@@ -182,9 +187,9 @@ export const  message = {
         "edit_title":"Edit the New Service Binding",
         "edit_list":[
           "Service Definition ID",
-          "Bind / Unbind",
           "Amount",
-          "Private Key"
+          "Gas Limit",
+          "Gas Preice"
         ]
       }
     ]

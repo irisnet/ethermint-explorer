@@ -31,10 +31,10 @@
       </div>
       <div class="title title1 title2 ">
         {{$t('message.service_detail[0].service_binding_title') }}
-        <div @click="create.show=true" class="btnRed" v-if="!list.svc_bind.createtime" style="right: 0;">
+        <div @click="createClick" class="btnRed" v-if="!list.svc_bind.createtime" style="right: 0;">
           {{$t('message.service_detail[0].service_binding_btnRed') }}
         </div>
-        <div @click="edit.show=true" v-else class="btnRed_blue" @mouseenter="update='service-detail-update.png'"
+        <div @click="editClick" v-else class="btnRed_blue" @mouseenter="update='service-detail-update.png'"
              @mouseleave="update='detail-update.png'">
           {{$t('message.service_detail[0].service_binding_btnBlue') }}
           <img :src="'../../static/img/'+update"/>
@@ -68,7 +68,6 @@
             {{$t('message.service_detail[0].edit_title')}}
             <img @click="edit.show=false" src="../../static/img/close.png" class="modal-close"/>
           </div>
-
           <div class="model-warp" >
             <div>
               {{$t('message.service_detail[0].edit_list[0]')}}
@@ -79,23 +78,31 @@
             </div>
           </div>
 
-
           <div class="model-warp" :class="{'amount':edit.amount.is}">
             <div>
-              {{$t('message.service_detail[0].edit_list[2]')}}
+              {{$t('message.service_detail[0].edit_list[1]')}}
               <span class="red">*</span>
             </div>
             <div>
               <input @blur="edit.amount.is=false" @focus="edit.amount.is=true" type="text" v-model="edit.amount.val" style=" width: 110px;"/>
             </div>
           </div>
-          <div class="model-warp" :class="{'model-warp-selected':edit.key.is}">
+          <div class="model-warp" :class="{'amount':edit.limit.is}">
+            <div>
+              {{$t('message.service_detail[0].edit_list[2]')}}
+              <span class="red">*</span>
+            </div>
+            <div>
+              <input @blur="edit.limit.is=false" @focus="edit.limit.is=true" type="text" v-model="edit.limit.val" style=" width: 110px;"/>
+            </div>
+          </div>
+          <div class="model-warp" :class="{'amount':edit.preice.is}">
             <div>
               {{$t('message.service_detail[0].edit_list[3]')}}
               <span class="red">*</span>
             </div>
             <div>
-              <input type="text" @blur="edit.key.is=false" @focus="edit.key.is=true"  v-model="edit.key.val"/>
+              <input @blur="edit.preice.is=false" @focus="edit.preice.is=true" type="text" v-model="edit.preice.val" style=" width: 110px;"/>
             </div>
           </div>
           <div class="model-btn">
@@ -126,15 +133,6 @@
             </div>
           </div>
 
-          <div class="model-warp" :class="{'amount':create.def_addr.is}">
-            <div>
-              {{$t('message.service_detail[0].create_list[1]')}}
-              <span class="red">*</span>
-            </div>
-            <div>
-              <input @blur="create.def_addr.is=false" @focus="create.def_addr.is=true" type="text" v-model="create.def_addr.val" style=" width: 110px;"/>
-            </div>
-          </div>
           <div class="model-warp" :class="{'amount':create.amount.is}">
             <div>
               {{$t('message.service_detail[0].create_list[2]')}}
@@ -144,13 +142,22 @@
               <input @blur="create.amount.is=false" @focus="create.amount.is=true" type="text" v-model="create.amount.val" style=" width: 110px;"/>
             </div>
           </div>
-          <div class="model-warp" :class="{'model-warp-selected':create.key.is}">
+          <div class="model-warp" :class="{'amount':create.limit.is}">
             <div>
               {{$t('message.service_detail[0].create_list[3]')}}
               <span class="red">*</span>
             </div>
             <div>
-              <input type="text" @blur="create.key.is=false" @focus="create.key.is=true"  v-model="create.key.val"/>
+              <input @blur="create.limit.is=false" @focus="create.limit.is=true" type="text" v-model="create.limit.val" style=" width: 110px;"/>
+            </div>
+          </div>
+          <div class="model-warp" :class="{'amount':create.preice.is}">
+            <div>
+              {{$t('message.service_detail[0].create_list[3]')}}
+              <span class="red">*</span>
+            </div>
+            <div>
+              <input @blur="create.preice.is=false" @focus="create.preice.is=true" type="text" v-model="create.preice.val" style=" width: 110px;"/>
             </div>
           </div>
           <div class="model-btn">
@@ -165,24 +172,25 @@
         </div>
       </div>
     </div>
+    <mytoken></mytoken>
   </div>
 </template>
 
 
 <script>
   import head from "./head";
-
+  import token from "./token";
   export default {
     name: 'service_detail',
     components: {
-      myhead: head
+      myhead: head,
+      mytoken: token
     },
     data() {
       return {
         list: {},
         update: 'detail-update.png',
         edit:{
-
           list:[
             'Bind',
             'Unbind'
@@ -192,25 +200,29 @@
             is:false,
             val:'amount'
           },
-          key:{
+          limit:{
             is:false,
-            val:'key'
+            val:"limit"
+          },
+          preice:{
+            is:false,
+            val:"Preice"
           },
           show:false
         },
         create:{
           show:false,
-          def_addr:{
-            is:false,
-            val:'def_addr'
-          },
           amount:{
             is:false,
-            val:'amount'
+            val:''
           },
-          key:{
+          limit:{
             is:false,
-            val:'key'
+            val:"limit"
+          },
+          preice:{
+            is:false,
+            val:"Preice"
           },
         }
       }
@@ -226,6 +238,12 @@
         let s = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds());
         return Y + M + D + h + m + s;
       },
+      editClick(){
+        this.$store.state.wallerModel == '' ? window.scrollTo(0, 900) : this.edit.show = true;
+      },
+      createClick(){
+        this.$store.state.wallerModel == '' ? window.scrollTo(0, 900) : this.create.show = true;
+      }
     },
     created: function () {
       this.list = JSON.parse(this.service.get_svc_def_by_id(this.$route.params.number));

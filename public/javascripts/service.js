@@ -1,34 +1,21 @@
-const Web3 = require("web3");
 const Transaction = require("./transaction");
 const irisSvcContract = require("../contract/irisSvcContract");
-
-const httpUri = "http://10.10.0.1:8546";
-const web3 = new Web3(new Web3.providers.HttpProvider(httpUri));
-
 const transaction = new Transaction();
-const myContract = web3.eth.contract(irisSvcContract);
-
-const contractInstance = myContract.at('0x1645adf21f42f202a2f1bc4b5a1d200d2d54118c');
-
-const defEvents = contractInstance.evtSvcDef([{fromBlock: 0, toBlock: 'latest'}]);
-const bindEvents = contractInstance.evtSvcBind([{fromBlock: 0, toBlock: 'latest'}]);
-const bindUpdateEvents = contractInstance.evtSvcBindUpdate([{fromBlock: 0, toBlock: 'latest'}]);
-
-const events = contractInstance.allEvents({fromBlock: 0, toBlock: 'latest'});
-
-events.watch(function (error, event) {
-  console.log("events result", event);
-  if (!error) {
-    console.log(event.transactionHash);
-  }
-});
-
-
+let contractInstance;
+let defEvents;
+let bindEvents;
+let bindUpdateEvents;
+let web3;
 const gasLimit = 4300000;
 const gasPrice = 20000000000;
 
-function Service() {
-
+function Service(web3js) {
+   web3=web3js;
+  let myContract = web3.eth.contract(irisSvcContract);
+  contractInstance = myContract.at('0x1645adf21f42f202a2f1bc4b5a1d200d2d54118c');
+  defEvents = contractInstance.evtSvcDef([{fromBlock: 0, toBlock: 'latest'}]);
+  bindEvents = contractInstance.evtSvcBind([{fromBlock: 0, toBlock: 'latest'}]);
+  bindUpdateEvents = contractInstance.evtSvcBindUpdate([{fromBlock: 0, toBlock: 'latest'}]);
 }
 
 /**
@@ -42,8 +29,9 @@ function Service() {
  * @param github  github address
  * @returns {Promise}
  */
-Service.prototype.defineService = function defineService(wallet, cd, name, desc, defType, definition, github) {
+Service.prototype.defineService = function defineService(wallet, cd, name, desc, defType, definition, github, gasPrice, gasLimit) {
   return new Promise(function (resolve, reject) {
+    debugger;
       let data = contractInstance.defineService.getData(cd, name, desc, defType, definition, github);
       let rawTx = {
         nonce: transaction.getNonce(web3, wallet),

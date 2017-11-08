@@ -5,7 +5,7 @@
       <div class="title">
         {{$t('message.service[0].title')}}
       </div>
-      <div class="btnRed" @click="create=true">
+      <div class="btnRed" @click="createClick">
         {{$t('message.service[0].btnRed')}}
       </div>
       <div class="title_list title_list_flex">
@@ -13,16 +13,17 @@
       </div>
       <div>
         <div class="title_list_warp title_list_flex" v-for="item in list.data">
-          <div>{{item.svc_cd }}</div>
-          <div>{{item.svc_name }}</div>
+          <div>{{item.cd }}</div>
+          <div>{{item.name }}</div>
           <div>
-            <router-link :to="'/account/'+item.auth">{{item.auth }}</router-link>
+            <router-link :to="'/account/'+item.addr">{{item.addr }}</router-link>
           </div>
-          <div>{{item.block_type }}</div>
-          <div>{{item.auth }}</div>
+          <div>{{item.defType }}</div>
+
           <div>{{getDate(item.createtime)}}</div>
-          <div>{{getDate(item.createtime)}}</div>
-          <div><a target="_blank" :href="'/service/detail/'+item.id"><img src="../../static/img/service_select.png"></a>
+
+          <div>
+            <router-link :to="'/service/detail/'+item.id"><img src="../../static/img/service_select.png"></router-link>
           </div>
         </div>
       </div>
@@ -37,10 +38,10 @@
       <div class="modal " :class="{'model-show':create}">
         <div class="modal-dialog">
           <div style="margin-bottom: 12px" class="modal-head ">
-            {{$t('message.service[0].create[7]')}}
+            {{$t('message.service[0].createList[0]')}}
             <img src="../../static/img/close.png" @click="create=false" class="modal-close"/>
           </div>
-          <div class="model-warp" v-for="item in 6" :class="{'model-warp-selected':model[item-1].is}">
+          <div class="model-warp" v-for="item in 7" :class="{'model-warp-selected':model[item-1].is}">
             <div>
               {{$t('message.service[0].create[' + (item - 1) + ']')}}
               <span class="red" v-if="model[item-1].required">*</span>
@@ -53,48 +54,40 @@
 
           <div class="model-warp">
             <div>
-              {{$t('message.service[0].create[6]')}}
+              {{$t('message.service[0].create[8]')}}
               <span class="red">*</span>
             </div>
             <div class="textarea">
-              <textarea v-model="model[6].val"></textarea>
+              <textarea v-model="model[7].val"></textarea>
             </div>
           </div>
           <div class="model-btn">
             <div class="save" @click="save">
               <img src="../../static/img/save.png"/>
-              <span>{{$t('message.service[0].create[9]')}}</span>
+              <span>{{$t('message.service[0].createList[2]')}}</span>
             </div>
             <div class="cancel" @click="create=false">
-              {{$t('message.service[0].create[8]')}}
+              {{$t('message.service[0].createList[1]')}}
             </div>
           </div>
         </div>
       </div>
-      <div class="modal modal-tools modal-failed modal-processing" :class="{'model-show':failed}">
-        <div class="modal_hint modal-dialog">
-          <img src="../../static/img/failed.png"/>
-          <span>{{$t('message.head.modal[1]') }}</span>
-        </div>
-      </div>
-      <div class="modal modal-tools modal-done modal-processing" :class="{'model-show':done}">
-        <div class="modal_hint modal-dialog">
-          <img src="../../static/img/done.png"/>
-          <span>{{$t('message.head.modal[2]') }}</span>
-        </div>
-      </div>
+
     </div>
+    <mytoken></mytoken>
   </div>
 </template>
 
 
 <script>
   import head from "./head";
+  import token from "./token";
 
   export default {
     name: 'service',
     components: {
-      myhead: head
+      myhead: head,
+      mytoken: token
     },
     data() {
       return {
@@ -103,19 +96,16 @@
           total: 0
         },
         model: [
-          {_svc_cd: '', val: '', is: false, required: true},
-          {_svc_name: '', val: '', is: false, required: true},
-          {_description: '', val: '', is: false, required: true},
-          {_svc_def_type: '', val: '', is: false, required: true},
-          {_svc_key: '', val: '', is: false, required: true},
-          {_github: '', val: '', is: false, required: false},
-          {_svc_def: '', val: '', is: false, required: true},
-          {_auth: '', val: '*', is: false, required: true},
-          {_block_type: '', val: 'ethereum', is: false, required: true}
+          {key: 'cd', val: '', is: false, required: true},
+          {key: 'name', val: '', is: false, required: true},
+          {key: 'desc', val: '', is: false, required: true},
+          {key: 'defType', val: '', is: false, required: true},
+          {key: 'github', val: '', is: false, required: false},
+          {key: 'gasLimit', val: '4300000', is: false, required: false},
+          {key: 'gasPrice', val: '20000000000', is: false, required: false},
+          {key: 'definition', val: '', is: false, required: true}
         ],
-        create: false,
-        done: false,
-        failed: false
+        create: false
       }
     },
     methods: {
@@ -124,7 +114,8 @@
         this.limit();
       },
       limit() {
-        this.list = JSON.parse(this.service.get_svc_def_list_limit(((this.page - 1) * 10), 10));
+        this.list = this.service.getSvcDefList(((this.page - 1) * 10), 10);
+        console.log(this.list);
         this.list.total = Number(this.list.total);
       },
       getDate(date) {
@@ -139,41 +130,35 @@
       },
       save() {
         let bool = true;
+        let model = {};
         this.model.forEach((item) => {
           if (item.required && item.val.trim() === '') {
-            console.log(item);
             bool = false;
+          } else {
+            model[item.key] = item.val;
           }
         })
+        model.gasPrice = isNaN(parseInt(model.gasPrice)) ? 0 : parseInt(model.gasPrice)
+        model.gasLimit = isNaN(parseInt(model.gasLimit)) ? 0 : parseInt(model.gasLimit)
 
         if (bool) {
-          let _svc_cd = this.model[0].val;
-          let _svc_name = this.model[1].val;
-          let _description = this.model[2].val;
-          let _svc_def_type = this.model[3].val;
-          let _svc_key = this.model[4].val;
-          let _github = this.model[5].val;
-          let _svc_def = this.model[6].val;
-          let _auth = this.model[7].val;
-          let _block_type = this.model[8].val;
-          this.service.svc_def(_svc_cd, _svc_def_type, _svc_def, _auth, _github, _block_type, _svc_name, _description)
+
+          model.wallet = this.$store.state.wallerModel;
+
+          this.service.defineService(model.wallet, model.cd, model.name, model.desc, model.defType, model.definition,
+            model.github, model.gasPrice, model.gasLimit)
             .then((val) => {
-              this.create = false;
-              this.done = true;
-              setTimeout(() => {
-                this.done = false;
-              }, 2000)
-
-            }, (error) => {
-              this.create = false;
-              this.failed = true;
-              setTimeout(() => {
-                this.failed = false;
-              }, 2000)
-            });
-
+                this.create = false;
+                this.$modal({done: true})
+              },
+              (error) => {
+                this.create = false;
+                this.$modal({failed: true})
+              });
         }
-
+      },
+      createClick() {
+        this.$store.state.wallerModel == '' ? window.scrollTo(0, 900) : this.create = true;
       }
     },
     created: function () {

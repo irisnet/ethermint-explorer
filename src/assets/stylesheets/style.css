@@ -386,16 +386,16 @@ pre {
 }
 
 .service .title_list_flex div:nth-child(1) {
-    width: 180px;
+    width: 190px;
 }
 
 .service .title_list_flex div:nth-child(2) {
-    width: 140px;
+    width: 240px;
 
 }
 
 .service .title_list_flex div:nth-child(3) {
-    width: 140px;
+    width: 370px;
 }
 
 .service .title_list_flex div:nth-child(4) {
@@ -407,15 +407,6 @@ pre {
 }
 
 .service .title_list_flex div:nth-child(6) {
-    width: 180px;
-}
-
-背景色透明
-.service .title_list_flex div:nth-child(7) {
-    width: 180px;
-}
-
-.service .title_list_flex div:nth-child(8) {
     width: 86px;
     font-size: 0;
     text-align: center;

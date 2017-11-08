@@ -36,5 +36,12 @@ export default new Router({
       name: 'service_detail',
       component: service_detail
     }
-  ]
+  ],
+  scrollBehavior (to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { x: 0, y: 0 }
+    }
+  }
 })
