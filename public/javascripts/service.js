@@ -10,7 +10,7 @@ const gasLimit = 4300000;
 const gasPrice = 20000000000;
 
 function Service(web3js) {
-   web3=web3js;
+  web3 = web3js;
   let myContract = web3.eth.contract(irisSvcContract);
   contractInstance = myContract.at('0x1645adf21f42f202a2f1bc4b5a1d200d2d54118c');
   defEvents = contractInstance.evtSvcDef([{fromBlock: 0, toBlock: 'latest'}]);
@@ -31,7 +31,7 @@ function Service(web3js) {
  */
 Service.prototype.defineService = function defineService(wallet, cd, name, desc, defType, definition, github, gasPrice, gasLimit) {
   return new Promise(function (resolve, reject) {
-    debugger;
+      debugger;
       let data = contractInstance.defineService.getData(cd, name, desc, defType, definition, github);
       let rawTx = {
         nonce: transaction.getNonce(web3, wallet),
@@ -168,6 +168,7 @@ Service.prototype.getSvcDef = function getSvcDef(svcId) {
     createtime: arry[7].toString(10)
   };
 };
+
 /**
  * get Service Define List
  * @param skip 跳过的数据项个数
@@ -186,6 +187,29 @@ Service.prototype.getSvcDefList = function getSvcDefList(skip, limit) {
   }
   for (let i = skip; i < last; i++) {
     data.push(this.getSvcDef(i + 1));
+  }
+  return {total: total, data: data};
+};
+
+/**
+ * get Service Define List Desc
+ * @param skip 跳过的数据项个数
+ * @param limit 获取的数据项个数
+ * @returns {*}
+ */
+Service.prototype.getSvcDefListDesc = function getSvcDefList(skip, limit) {
+  let total = this.getLatestSvcId().toString(10);
+  let data = [];
+  if (skip >= total || total <= 0) {
+    return {total: total, data: data};
+  }
+  let start = total - skip;
+  let end = start - limit;
+  if (end < 0) {
+    end = 0;
+  }
+  for (let i = start; i > end; i--) {
+    data.push(this.getSvcDef(i));
   }
   return {total: total, data: data};
 };
@@ -215,6 +239,14 @@ Service.prototype.getSvcBind = function getSvcBind(svcId) {
  */
 Service.prototype.getLatestSvcId = function getLatestSvcId() {
   return contractInstance.getLatestSvcId.call();
+};
+
+Service.prototype.getSvcDefByCd = function getSvcDefByCd(cd) {
+  let id = contractInstance.covertCdToId.call(cd);
+  if (id <= 0) {
+    return {};
+  }
+  return this.getSvcDef(id);
 };
 
 
