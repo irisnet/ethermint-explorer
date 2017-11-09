@@ -73,7 +73,7 @@ Service.prototype.defineService = function defineService(wallet, cd, name, desc,
  * @param fee
  * @returns {Promise}
  */
-Service.prototype.bindService = function bindService(wallet, svcId, bindState, auth, fee) {
+Service.prototype.bindService = function bindService(wallet, svcId, bindState, auth, fee,gasPrice,gasLimit) {
   return new Promise(function (resolve, reject) {
       let publicKey = wallet.getPublicKey().toString("hex");
       let data = contractInstance.bindService.getData(svcId, bindState, auth, fee, publicKey);
@@ -116,7 +116,7 @@ Service.prototype.bindService = function bindService(wallet, svcId, bindState, a
  * @param fee
  * @returns {Promise}
  */
-Service.prototype.updateSvcBind = function updateSvcBind(wallet, svcId, bindState, auth, fee) {
+Service.prototype.updateSvcBind = function updateSvcBind(wallet, svcId, bindState, auth, fee,gasPrice,gasLimit) {
   return new Promise(function (resolve, reject) {
       let publicKey = wallet.getPublicKey().toString("hex");
       let data = contractInstance.updateSvcBind.getData(svcId, bindState, auth, fee, publicKey);
@@ -156,17 +156,21 @@ Service.prototype.updateSvcBind = function updateSvcBind(wallet, svcId, bindStat
  * @returns {*}
  */
 Service.prototype.getSvcDef = function getSvcDef(svcId) {
-  let arry = contractInstance.getSvcDef.call(svcId);
-  return {
-    addr: arry[0],
-    cd: arry[1],
-    name: arry[2],
-    desc: arry[3],
-    defType: arry[4],
-    def: arry[5],
-    github: arry[6],
-    createtime: arry[7].toString(10)
-  };
+  try {
+    let arry = contractInstance.getSvcDef.call(svcId);
+    return {
+      addr: arry[0],
+      cd: arry[1],
+      name: arry[2],
+      desc: arry[3],
+      defType: arry[4],
+      def: arry[5],
+      github: arry[6],
+      createtime: arry[7].toString(10)
+    };
+  } catch (err) {
+    return {}
+  }
 };
 
 /**
@@ -221,15 +225,19 @@ Service.prototype.getSvcDefListDesc = function getSvcDefList(skip, limit) {
  * @returns {*}
  */
 Service.prototype.getSvcBind = function getSvcBind(svcId) {
-  let arry = contractInstance.getSvcBind.call(svcId);
-  return {
-    addr: arry[0],
-    state: arry[1].toString(10),
-    auth: arry[2],
-    fee: arry[3].toString(10),
-    publicKey: arry[4],
-    createtime: arry[5].toString(10),
-    updatetime: arry[6].toString(10)
+  try {
+    let arry = contractInstance.getSvcBind.call(svcId);
+    return {
+      addr: arry[0],
+      state: arry[1].toString(10),
+      auth: arry[2],
+      fee: arry[3].toString(10),
+      publicKey: arry[4],
+      createtime: arry[5].toString(10),
+      updatetime: arry[6].toString(10)
+    }
+  } catch (err) {
+    return {}
   }
 };
 
@@ -241,12 +249,19 @@ Service.prototype.getLatestSvcId = function getLatestSvcId() {
   return contractInstance.getLatestSvcId.call();
 };
 
-Service.prototype.getSvcDefByCd = function getSvcDefByCd(cd) {
+Service.prototype.getSvcDefDetailByCd = function getSvcDefByCd(cd) {
   let id = contractInstance.covertCdToId.call(cd);
   if (id <= 0) {
     return {};
   }
-  return this.getSvcDef(id);
+  let result = this.getSvcDef(id);
+  result.id = id.toString(10);
+  result.svcBind = this.getSvcBind(id);
+  return result;
+};
+
+Service.prototype.covertCdToId = function covertCdToId(cd) {
+  return contractInstance.covertCdToId.call(cd);
 };
 
 

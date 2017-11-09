@@ -10,20 +10,20 @@ const web3 = new Web3(new Web3.providers.HttpProvider(httpUri));
 const wallet = Wallet.fromPrivateKey('0ce9f0b80483fbae111ac7df48527d443594a902b00fc797856e35eb7b12b4be');
 
 const Service = require("../service");
-const service = new Service();
+const service = new Service(web3);
 
 const i = 2;
 // defineServiceTest(i);
-let svcDef = service.getSvcDef(i);
+let svcDef = service.getSvcDefDetailByCd('Code');
 console.log(svcDef);
-let svcDefList = service.getSvcDefList(2,1);
-console.log(svcDefList);
+// let svcDefList = service.getSvcDefList(2,1);
+// console.log(svcDefList);
 // bindServiceTest(i);
 // let svcBind = service.getSvcBind(i);
 // console.log(svcBind);
 // updateSvcBindTest(i);
-svcBind = service.getSvcBind(i);
-console.log(svcBind);
+// svcBind = service.getSvcBind(i);
+// console.log(svcBind);
 
 function defineServiceTest(i) {
   let cd = "BJ00" + i;

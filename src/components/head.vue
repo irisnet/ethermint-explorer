@@ -3,17 +3,19 @@
     <div class="center fff">
       <div class="title">{{$t('message.head.title') }}</div>
       <div class="head_list">
-        <router-link  v-for="(item,index) in $t('message.head.list')" :key="index" :class="{'select':item.is}" :to="item.href">{{item.txt}} </router-link>
+        <router-link v-for="(item,index) in $t('message.head.list')" :key="index" :class="{'select':item.is}"
+                     :to="item.href">{{item.txt}}
+        </router-link>
       </div>
       <div class="img">
         <a :href="$t('message.head.img.href')">
           <img :src="$t('message.head.img.src')"/>
         </a>
       </div>
-      <form action="/search" class="text" method="POST">
-        <button class="btnBlue" type="submit">{{$t('message.head.submit') }}</button>
-        <input name="search" :placeholder="$t('message.head.text')" type="text"/>
-      </form>
+      <div class="text">
+        <button class="btnBlue" @click="search">{{$t('message.head.submit') }}</button>
+        <input name="search" v-model="text" :placeholder="$t('message.head.text')" type="text"/>
+      </div>
     </div>
   </div>
 </template>
@@ -24,15 +26,26 @@
     props: ['num'],
     data() {
       return {
-        listNum: this.num
+        listNum: this.num,
+        text: ''
+      }
+    },
+    methods: {
+      search() {
+        if (this.text.length < 22) {
+          this.$router.push('/block/' + this.text)
+        } else if (this.text.length == 66) {
+          this.$router.push('/tx/' + this.text)
+        } else if (this.text.length == 42) {
+          this.$router.push('/account/' + this.text)
+        }
       }
     },
     created: function () {
-      this.$t('message.head.list').forEach((item)=>{
-        item.is=false;
-      })
-      this.$t('message.head.list')[this.listNum].is=true;
-
+      this.$t('message.head.list').forEach((item) => {
+        item.is = false;
+      });
+      this.$t('message.head.list')[this.listNum].is = true;
     }
   };
 </script>
@@ -49,6 +62,7 @@
     top: 0;
     z-index: 2;
   }
+
   .head .title {
     font-family: "Helvetica Neue";
     font-size: 48px;

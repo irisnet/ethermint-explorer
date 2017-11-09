@@ -37,15 +37,15 @@
       </div>
       <div class="block_list">
         <div>{{$t('message.block[0].list[5]')}}:</div>
-        <div>{{numeral(block.difficulty).format()}}</div>
+        <div>{{numeral(block.difficulty).format() == 'NaN' ? '' : numeral(block.difficulty).format()}}</div>
       </div>
       <div class="block_list">
         <div>{{$t('message.block[0].list[6]')}}:</div>
-        <div>{{numeral(block.totalDifficulty).format()}}</div>
+        <div>{{numeral(block.totalDifficulty).format() == 'NaN' ? '' : numeral(block.totalDifficulty).format()}}</div>
       </div>
       <div class="block_list">
         <div>{{$t('message.block[0].list[7]')}}:</div>
-        <div>{{moment.unix(block.timestamp).format()}} ({{moment.unix(block.timestamp).fromNow()}})</div>
+        <div>{{moment.unix(block.timestamp).format()}}</div>
       </div>
       <div class="block_list">
         <div>{{$t('message.block[0].list[8]')}}:</div>
@@ -79,7 +79,7 @@
                   </div>
                 </div>
               </section>
-              <router-link :to="'/tx/'+item.hash" > {{item.hash.substr(0, 10)}}... </router-link>
+              <router-link :to="'/tx/'+item.hash"> {{item.hash.substr(0, 10)}}... </router-link>
             </div>
             <div class="capitalize">Tx</div>
             <div>
@@ -102,17 +102,21 @@
             </div>
             <div>{{trace.type}}</div>
             <div>
-              <router-link :to="'/account/'+trace.action.from"> {{nameformatter.format(trace.action.from)}}</router-link>
+              <router-link :to="'/account/'+trace.action.from"> {{nameformatter.format(trace.action.from)}}
+              </router-link>
             </div>
 
             <div v-if="trace.type === 'call'">
               <router-link :to="'/account/'+trace.action.to"> {{nameformatter.format(trace.action.to)}}</router-link>
             </div>
             <div v-if="trace.type === 'create'">
-              <router-link :to="'/account/'+trace.result.address"> {{nameformatter.format(trace.result.address)}}</router-link>
+              <router-link :to="'/account/'+trace.result.address"> {{nameformatter.format(trace.result.address)}}
+              </router-link>
             </div>
             <div v-if="trace.type === 'suicide'">
-              <router-link :to="'/account/'+trace.action.refundAddress"> {{nameformatter.format(trace.action.refundAddress)}}</router-link>
+              <router-link :to="'/account/'+trace.action.refundAddress">
+                {{nameformatter.format(trace.action.refundAddress)}}
+              </router-link>
             </div>
             <div v-if="trace.type === 'suicide'">
               {{ethformatter(trace.action.balance)}}

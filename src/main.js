@@ -32,7 +32,8 @@ Vue.prototype.web3 = new web3();
 Vue.prototype.web3.setProvider(new web3.providers.HttpProvider("http://10.10.0.1:8546"));
 Vue.prototype.service = new (utilsService)(Vue.prototype.web3);
 
-
+import gobal from "./utils/gobal/config"
+Vue.prototype.$g = gobal;//注册全局方法
 import './assets/stylesheets/normalize.css'
 import './assets/stylesheets/style.css'
 import store from './vuex/store'

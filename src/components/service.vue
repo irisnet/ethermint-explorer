@@ -19,11 +19,9 @@
             <router-link :to="'/account/'+item.addr">{{item.addr }}</router-link>
           </div>
           <div>{{item.defType }}</div>
-
           <div>{{getDate(item.createtime)}}</div>
-
           <div>
-            <router-link :to="'/service/detail/'+item.id"><img src="../../static/img/service_select.png"></router-link>
+            <router-link :to="'/service/detail/'+item.cd"><img src="../../static/img/service_select.png"></router-link>
           </div>
         </div>
       </div>
@@ -114,8 +112,7 @@
         this.limit();
       },
       limit() {
-        this.list = this.service.getSvcDefList(((this.page - 1) * 10), 10);
-        console.log(this.list);
+        this.list = this.service.getSvcDefListDesc(((this.page - 1) * 10), 10);
         this.list.total = Number(this.list.total);
       },
       getDate(date) {
@@ -149,6 +146,7 @@
             model.github, model.gasPrice, model.gasLimit)
             .then((val) => {
                 this.create = false;
+                this.limit();
                 this.$modal({done: true})
               },
               (error) => {
