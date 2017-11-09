@@ -66,3 +66,4 @@ data/
 .idea
 *.iml
 *.lock
+dist/

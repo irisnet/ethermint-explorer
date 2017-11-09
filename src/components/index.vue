@@ -71,18 +71,17 @@
             this.blockCount = lastBlock.number + 1;
           }
           for (var i = 0; i < 10; i++) {
-            this.web3.eth.getBlock(lastBlock.number - i, true, (err, block) => {
-              if (err) reject(err);
-              block.timestamp = this.moment.unix(block.timestamp).format();
-              block.transactions.forEach((tx) => {
-                tx.fromMat = this.nameformatter.format(tx.from);
-                tx.toMat = this.nameformatter.format(tx.to);
-                tx.value = this.ethformatter(tx.value);
-                txs.push(tx);
-              })
-              this.blocks.push(block);
+            let block = this.web3.eth.getBlock(lastBlock.number - i);
+            block.timestamp = this.moment.unix(block.timestamp).format();
+            block.transactions.forEach((tx) => {
+              tx.fromMat = this.nameformatter.format(tx.from);
+              tx.toMat = this.nameformatter.format(tx.to);
+              tx.value = this.ethformatter(tx.value);
+              this.txs.push(tx);
             });
+            this.blocks.push(block);
           }
+          console.log(this.blocks);
         })
         .catch(err => {
           console.log(err);
