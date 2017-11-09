@@ -12,10 +12,20 @@ const wallet = Wallet.fromPrivateKey('0ce9f0b80483fbae111ac7df48527d443594a902b0
 const Service = require("../service");
 const service = new Service(web3);
 
+web3.eth.filter("pending").watch(
+  function(error,result){
+    if (!error) {
+      console.log('pending', result);
+    }
+  }
+);
+
+
 const i = 2;
-// defineServiceTest(i);
-let svcDef = service.getSvcDefDetailByCd('Code');
-console.log(svcDef);
+defineServiceTest(i);
+
+// let svcDef = service.getSvcDefDetailByCd('Code');
+// console.log(svcDef);
 // let svcDefList = service.getSvcDefList(2,1);
 // console.log(svcDefList);
 // bindServiceTest(i);
@@ -33,7 +43,7 @@ function defineServiceTest(i) {
   let github = "xxxx3";
   let definition = "xxxx1";
 
-  service.defineService(wallet, cd, name, desc, defType, definition, github)
+  service.defineService(wallet, cd, name, desc, defType, definition, github,20000000000 ,4300000)
     .then(function (val) {
       console.log('val', val);
     }, function (error) {

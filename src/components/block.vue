@@ -4,12 +4,11 @@
     <div class="center recent_blocks block">
       <div class="title">{{$t('message.block[0].title')}}  {{block.number}}</div>
       <div class="btn_div">
-        <a :href="'/block/'+(block.number+1)" class="btnBlue">
-          {{$t('message.block[0].btn[1]') }}
-        </a>
-        <a v-if="block.number>=1" :href="'/block/'+(block.number-1)" class="btnBlue">
-          {{$t('message.block[0].btn[0]')}}
-        </a>
+
+        <router-link :to="'/block/'+(block.number+1)" class="btnBlue"> {{$t('message.block[0].btn[1]') }} </router-link>
+        <router-link v-if="block.number>=1" :to="'/block/'+(block.number-1)" class="btnBlue">
+          {{$t('message.block[0].btn[0]') }}
+        </router-link>
       </div>
       <div class="block_list">
         <div>{{$t('message.block[0].list[0]')}}:</div>
@@ -157,30 +156,28 @@
       leave(item) {
         item.is = false;
 
-      }
-    },
-    created: function () {
-
-      new Promise((resolve, reject) => {
-        this.web3.eth.getBlock(this.$route.params.number, true, function (err, result) {
-          if (err) reject(err);
-          else resolve(result);
-        });
-      })
-        .then(block => {
-          block.transactions.forEach((tx) => {
-            tx.traces = [];
-            tx.failed = false;
-            tx.is = false;
-            block.transactions.forEach(function (trace) {
-              if (tx.hash === trace.transactionHash) {
-                tx.traces.push(trace);
-                if (trace.error) {
-                  tx.failed = true;
-                  tx.error = trace.error;
+      },
+      init(num){
+        new Promise((resolve, reject) => {
+          this.web3.eth.getBlock(num, true, function (err, result) {
+            if (err) reject(err);
+            else resolve(result);
+          });
+        })
+          .then(block => {
+            block.transactions.forEach((tx) => {
+              tx.traces = [];
+              tx.failed = false;
+              tx.is = false;
+              block.transactions.forEach(function (trace) {
+                if (tx.hash === trace.transactionHash) {
+                  tx.traces.push(trace);
+                  if (trace.error) {
+                    tx.failed = true;
+                    tx.error = trace.error;
+                  }
                 }
-              }
-            });
+              });
 //            tx.traces = [{
 //              "action": {
 //                "from": "0x7eff122b94897ea5b0e2a9abf47b86337fafebdc",
@@ -210,13 +207,23 @@
 //              },
 //              "type": "suicide"
 //            }];
-          });
+            });
 
-          this.block = block;
-        })
-        .catch(err => {
-          console.log(err);
-        });
+            this.block = block;
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
+    },
+    created: function () {
+        this.init(this.$route.params.number);
+    },
+    watch: {
+      $route (to, from) {
+        this.init(to.params.number);
+      }
+
     }
   };
 </script>
