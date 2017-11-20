@@ -29,7 +29,7 @@ Vue.prototype.numeral = numeral;
 import web3 from 'web3'
 
 Vue.prototype.web3 = new web3();
-Vue.prototype.web3.setProvider(new web3.providers.HttpProvider("http://10.10.0.1:8546"));
+Vue.prototype.web3.setProvider(new web3.providers.HttpProvider("http://116.62.62.39:8546"));
 Vue.prototype.service = new (utilsService)(Vue.prototype.web3);
 
 import gobal from "./utils/gobal/config"

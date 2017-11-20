@@ -5,7 +5,7 @@ const Web3 = require("web3");
 const irisSvcContract = require("../../contract/irisSvcContract");
 const Wallet = require("../wallet");
 
-const httpUri = "http://10.10.0.1:8546";
+const httpUri = "http://116.62.62.39:8546";
 const web3 = new Web3(new Web3.providers.HttpProvider(httpUri));
 const wallet = Wallet.fromPrivateKey('0ce9f0b80483fbae111ac7df48527d443594a902b00fc797856e35eb7b12b4be');
 
@@ -49,6 +49,7 @@ function defineServiceTest(i) {
     }, function (error) {
       console.log('error', error);
     });
+
 }
 
 function bindServiceTest(i) {
