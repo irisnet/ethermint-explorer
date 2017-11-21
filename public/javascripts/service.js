@@ -50,9 +50,11 @@ Service.prototype.defineService = function defineService(wallet, cd, name, desc,
             if (!error) {
               if (event.transactionHash === result) {
                 let svc_id = event.args.svcId.toString(10);
+                defEvents.stopWatching();
                 resolve(svc_id);
               }
             } else {
+              defEvents.stopWatching();
               reject(error);
             }
           });
@@ -93,9 +95,11 @@ Service.prototype.bindService = function bindService(wallet, svcId, bindState, a
           bindEvents.watch(function (error, event) {
             if (!error) {
               if (event.transactionHash === result) {
+                bindEvents.stopWatching();
                 resolve(event.args.bindId);
               }
             } else {
+              bindEvents.stopWatching();
               reject(error);
             }
           });
@@ -136,9 +140,11 @@ Service.prototype.updateSvcBind = function updateSvcBind(wallet, svcId, bindStat
           bindUpdateEvents.watch(function (error, event) {
             if (!error) {
               if (event.transactionHash === result) {
+                bindUpdateEvents.stopWatching();
                 resolve(event.args.bindId);
               }
             } else {
+              bindUpdateEvents.stopWatching();
               reject(error);
             }
           });
