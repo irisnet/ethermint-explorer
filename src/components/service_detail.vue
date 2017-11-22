@@ -51,7 +51,7 @@
       </div>
       <div v-if="list.svcBind.createtime" class="service_definition" style="margin-top: 28px">
         <div>{{$t('message.service_detail[0].service_binding_List[2]')}}</div>
-        <div>{{list.svcBind.state == 0 ? modal.list[list.svcBind.state].txt : modal.list[list.svcBind.state].txt}}</div>
+        <div>{{list.svcBind.state == 1 ? modal.list[0].txt : modal.list[1].txt}}</div>
         <div>{{$t('message.service_detail[0].service_binding_List[0]')}}</div>
         <div>{{list.svcBind.auth}}</div>
       </div>
@@ -166,8 +166,8 @@
         update: 'detail-update.png',
         modal: {
           list: [
-            {txt: 'Bind', val: 0},
-            {txt: 'Unbind', val: 1}
+            {txt: 'Bind', val: 1},
+            {txt: 'Unbind', val: 0}
           ],
           bindState: '0',
           amount: {

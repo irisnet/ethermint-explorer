@@ -12,7 +12,7 @@ const gasPrice = 20000000000;
 function Service(web3js) {
   web3 = web3js;
   let myContract = web3.eth.contract(irisSvcContract);
-  contractInstance = myContract.at('0x70f94d58cc3fdcbeac7140f35a087da9fcd09b94');
+  contractInstance = myContract.at('0x9756df90d6c741c5bdc262aa869090515bd269ed');
   defEvents = contractInstance.evtSvcDef([{fromBlock: 0, toBlock: 'latest'}]);
   bindEvents = contractInstance.evtSvcBind([{fromBlock: 0, toBlock: 'latest'}]);
   bindUpdateEvents = contractInstance.evtSvcBindUpdate([{fromBlock: 0, toBlock: 'latest'}]);
