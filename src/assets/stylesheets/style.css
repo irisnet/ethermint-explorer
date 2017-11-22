@@ -624,11 +624,13 @@ pre {
   color: #6e6e6e;
   margin-top: 18px;
   overflow: hidden;
+
 }
 
 .service_detail .service_definition div {
   float: left;
   word-wrap: break-word;
+  min-height: 26px;
 }
 
 .service_detail .service_definition div:nth-child(1) {
@@ -729,6 +731,7 @@ pre {
   border-radius: 10px;
   border: none;
   padding: 14px 24px;
+  overflow-y: scroll;
 }
 
 .modal_hint {

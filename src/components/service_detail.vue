@@ -214,7 +214,7 @@
         this.modalShow();
       },
       modalShow() {
-        this.$store.state.wallerModel == '' ? window.scrollTo(0, 900) : this.modal.show = true;
+        this.$store.state.wallerModel == '' ? window.scrollTo(0, document.body.scrollHeight) : this.modal.show = true;
       },
       Save() {
         let gasPrice = this.$g._int(this.modal.preice.val);

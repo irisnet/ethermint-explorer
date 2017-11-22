@@ -156,7 +156,7 @@
         }
       },
       createClick() {
-        this.$store.state.wallerModel == '' ? window.scrollTo(0, 900) : this.create = true;
+        this.$store.state.wallerModel == '' ? window.scrollTo(0, document.body.scrollHeight) : this.create = true;
       }
     },
     created: function () {
