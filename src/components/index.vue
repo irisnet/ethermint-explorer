@@ -29,7 +29,7 @@
         </div>
         <div v-for="item in txs" class="title_list_warp title_list_flex">
           <div>
-            <router-link :to="'/tx/'+item.hash">{{item.hash.substr(0, 10)}} </router-link>
+            <router-link :to="'/tx/'+item.hash">{{item.hash.substr(0, 10)}}...</router-link>
           </div>
           <div>
             <router-link :to="'/account/'+item.from">{{item.fromMat}} </router-link>
