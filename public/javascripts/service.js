@@ -77,7 +77,7 @@ Service.prototype.defineService = function defineService(wallet, cd, name, desc,
  */
 Service.prototype.bindService = function bindService(wallet, svcId, bindState, auth, fee,gasPrice,gasLimit) {
   return new Promise(function (resolve, reject) {
-      let publicKey = wallet.getPublicKey().toString("hex");
+      let publicKey = "04" + wallet.getPublicKey().toString("hex");
       let data = contractInstance.bindService.getData(svcId, bindState, auth, fee, publicKey);
       let rawTx = {
         nonce: transaction.getNonce(web3, wallet),
@@ -122,7 +122,7 @@ Service.prototype.bindService = function bindService(wallet, svcId, bindState, a
  */
 Service.prototype.updateSvcBind = function updateSvcBind(wallet, svcId, bindState, auth, fee,gasPrice,gasLimit) {
   return new Promise(function (resolve, reject) {
-      let publicKey = wallet.getPublicKey().toString("hex");
+      let publicKey = "04" + wallet.getPublicKey().toString("hex");
       let data = contractInstance.updateSvcBind.getData(svcId, bindState, auth, fee, publicKey);
       let rawTx = {
         nonce: transaction.getNonce(web3, wallet),
