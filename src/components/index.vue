@@ -38,7 +38,7 @@
             <router-link v-if="item.to" :to="'/account/'+item.to">{{item.toMat}} </router-link>
             <span v-else> {{$t('message.index[1].Amount') }}</span>
           </div>
-          <div>{{tx.value}}</div>
+          <div>{{item.value}}</div>
         </div>
       </section>
     </div>
@@ -71,7 +71,8 @@
             this.blockCount = lastBlock.number + 1;
           }
           for (var i = 0; i < 10; i++) {
-            let block = this.web3.eth.getBlock(lastBlock.number - i);
+            let block = this.web3.eth.getBlock(lastBlock.number - i, true);
+            console.log(block);
             block.timestamp = this.moment.unix(block.timestamp).format();
             block.transactions.forEach((tx) => {
               tx.fromMat = this.nameformatter.format(tx.from);
@@ -82,6 +83,7 @@
             this.blocks.push(block);
           }
           console.log(this.blocks);
+
         })
         .catch(err => {
           console.log(err);
