@@ -23,7 +23,6 @@ web3.eth.filter("pending").watch(
 
 const i = 2;
 defineServiceTest(i);
-
 // let svcDef = service.getSvcDefDetailByCd('Code');
 // console.log(svcDef);
 // let svcDefList = service.getSvcDefList(2,1);
