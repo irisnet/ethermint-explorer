@@ -31,7 +31,7 @@ function Service(web3js) {
  */
 Service.prototype.defineService = function defineService(wallet, cd, name, desc, defType, definition, github, gasPrice, gasLimit) {
   return new Promise(function (resolve, reject) {
-      debugger;
+
       let data = contractInstance.defineService.getData(cd, name, desc, defType, definition, github);
       let rawTx = {
         nonce: transaction.getNonce(web3, wallet),

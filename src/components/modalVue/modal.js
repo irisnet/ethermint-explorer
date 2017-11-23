@@ -10,7 +10,14 @@ export default {
       $modal.model = model;
       if(!model.process){
         setTimeout(() => {
-          $modal.model={}
+          $modal.model={
+            failed: false,
+            done: false,
+            process:false,
+            error:{
+              text:''
+            }
+          }
         }, 2000)
       }
     });

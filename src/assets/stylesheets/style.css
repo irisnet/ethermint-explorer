@@ -561,6 +561,7 @@ pre {
   width: 110px;
   border-bottom: 1px solid #d7d7d7;
   color: #0088ce !important;
+  background-color: #fff;
 }
 
 .amount div:nth-child(2) {

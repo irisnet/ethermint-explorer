@@ -3,8 +3,7 @@
     <div class="title token">
       Send Ether & Tokens
     </div>
-    <div class="token_warp"
-  >
+    <div class="token_warp">
       <div style="height: 30px;"></div>
       <div class="token_warp_center">
         <div class="token_warp_center_left">
@@ -76,23 +75,33 @@
         el.target.value = ''
       },
       save() {
-        this.$modal({process: true})
+
         if (this.radio == '1') {
-          setTimeout(() => {
-            this.fileKey();
-          },100)
+            setTimeout(() => {
+              this.$modal({process: true})
+              this.fileKey();
+            },100)
         } else {
+          this.$modal({process: true})
           this.walletFromPrivateKey();
         }
       },
       fileKey() {
-        let KeyFile = this.wallet.getWalletFromPrivKeyFile(this.file, this.password);
-        this.privateKey = KeyFile.getPrivateKey().toString("hex");
-        this.walletFromPrivateKey()
+        try {
+          let KeyFile = this.wallet.getWalletFromPrivKeyFile(this.file, this.password);
+          this.privateKey = KeyFile.getPrivateKey().toString("hex");
+          this.walletFromPrivateKey()
+        }catch (e){
+          this.$modal({error:{text:e.toString()}})
+        }
       },
       walletFromPrivateKey() {
-        this.$modal({process: false})
-        this.$store.state.wallerModel = this.wallet.fromPrivateKey(this.privateKey);
+        try {
+          this.$modal({process: false})
+          this.$store.state.wallerModel = this.wallet.fromPrivateKey(this.privateKey);
+        }catch (e){
+          this.$modal({error:{text:e.toString()}})
+        }
       }
     }
   }
