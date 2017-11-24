@@ -13,9 +13,6 @@ function Service(web3js) {
   web3 = web3js;
   let myContract = web3.eth.contract(irisSvcContract);
   contractInstance = myContract.at('0xb6b29ef90120bec597939e0eda6b8a9164f75deb');
-  defEvents = contractInstance.evtSvcDef([{fromBlock: 0, toBlock: 'latest'}]);
-  bindEvents = contractInstance.evtSvcBind([{fromBlock: 0, toBlock: 'latest'}]);
-  bindUpdateEvents = contractInstance.evtSvcBindUpdate([{fromBlock: 0, toBlock: 'latest'}]);
 }
 
 /**
@@ -27,6 +24,8 @@ function Service(web3js) {
  * @param defType  service definition type
  * @param definition  service definition
  * @param github  github address
+ * @param gasPrice
+ * @param gasLimit
  * @returns {Promise}
  */
 Service.prototype.defineService = function defineService(wallet, cd, name, desc, defType, definition, github, gasPrice, gasLimit) {
@@ -43,6 +42,7 @@ Service.prototype.defineService = function defineService(wallet, cd, name, desc,
       };
       let rowTx = transaction.signTX(wallet, rawTx);
       let serializedTx = rowTx.toString("hex");
+      defEvents = contractInstance.evtSvcDef([{fromBlock: 0, toBlock: 'latest'}]);
       web3.eth.sendRawTransaction('0x' + serializedTx, function (error, result) {
         if (!error) {
           // watch for changes
@@ -73,9 +73,11 @@ Service.prototype.defineService = function defineService(wallet, cd, name, desc,
  * @param bindState  bind State "1: bind/0: unbind"
  * @param auth
  * @param fee
+ * @param gasPrice
+ * @param gasLimit
  * @returns {Promise}
  */
-Service.prototype.bindService = function bindService(wallet, svcId, bindState, auth, fee,gasPrice,gasLimit) {
+Service.prototype.bindService = function bindService(wallet, svcId, bindState, auth, fee, gasPrice, gasLimit) {
   return new Promise(function (resolve, reject) {
       let publicKey = "04" + wallet.getPublicKey().toString("hex");
       let data = contractInstance.bindService.getData(svcId, bindState, auth, fee, publicKey);
@@ -89,6 +91,7 @@ Service.prototype.bindService = function bindService(wallet, svcId, bindState, a
       };
       let rowTx = transaction.signTX(wallet, rawTx);
       let serializedTx = rowTx.toString("hex");
+      bindEvents = contractInstance.evtSvcBind([{fromBlock: 0, toBlock: 'latest'}]);
       web3.eth.sendRawTransaction('0x' + serializedTx, function (error, result) {
         if (!error) {
           // watch for changes
@@ -118,9 +121,11 @@ Service.prototype.bindService = function bindService(wallet, svcId, bindState, a
  * @param bindState  bind State "1: bind/0: unbind"
  * @param auth
  * @param fee
+ * @param gasPrice
+ * @param gasLimit
  * @returns {Promise}
  */
-Service.prototype.updateSvcBind = function updateSvcBind(wallet, svcId, bindState, auth, fee,gasPrice,gasLimit) {
+Service.prototype.updateSvcBind = function updateSvcBind(wallet, svcId, bindState, auth, fee, gasPrice, gasLimit) {
   return new Promise(function (resolve, reject) {
       let publicKey = "04" + wallet.getPublicKey().toString("hex");
       let data = contractInstance.updateSvcBind.getData(svcId, bindState, auth, fee, publicKey);
@@ -134,6 +139,7 @@ Service.prototype.updateSvcBind = function updateSvcBind(wallet, svcId, bindStat
       };
       let rowTx = transaction.signTX(wallet, rawTx);
       let serializedTx = rowTx.toString("hex");
+      bindUpdateEvents = contractInstance.evtSvcBindUpdate([{fromBlock: 0, toBlock: 'latest'}]);
       web3.eth.sendRawTransaction('0x' + serializedTx, function (error, result) {
         if (!error) {
           // watch for changes
@@ -141,7 +147,7 @@ Service.prototype.updateSvcBind = function updateSvcBind(wallet, svcId, bindStat
             if (!error) {
               if (event.transactionHash === result) {
                 bindUpdateEvents.stopWatching();
-                resolve(event.args.bindId);
+                resolve(event.args.result);
               }
             } else {
               bindUpdateEvents.stopWatching();
