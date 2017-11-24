@@ -77,8 +77,8 @@
       save() {
 
         if (this.radio == '1') {
+          this.$modal({process: true})
             setTimeout(() => {
-              this.$modal({process: true})
               this.fileKey();
             },100)
         } else {

@@ -217,6 +217,7 @@
         this.$store.state.wallerModel == '' ? window.scrollTo(0, document.body.scrollHeight) : this.modal.show = true;
       },
       Save() {
+        this.$modal({process: true})
         let gasPrice = this.$g._int(this.modal.preice.val);
         let gasLimit = this.$g._int(this.modal.limit.val);
         if (this.modal.state == 'edit') {
@@ -225,6 +226,7 @@
               this.init();
             },
             (error) => {
+              console.log(error);
               this.$modal({failed: true})
             });
         } else {
