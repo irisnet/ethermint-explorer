@@ -141,7 +141,7 @@
         if (bool) {
 
           model.wallet = this.$store.state.wallerModel;
-
+          this.$modal({process: true})
           this.service.defineService(model.wallet, model.cd, model.name, model.desc, model.defType, model.definition,
             model.github, model.gasPrice, model.gasLimit)
             .then((val) => {

@@ -8,7 +8,7 @@ export default {
     document.body.appendChild($modal.$mount().$el);
     Vue.prototype.$modal = (model => {
       $modal.model = model;
-      if(!model.process){
+      if(model.done||model.failed){
         setTimeout(() => {
           $modal.model={
             failed: false,
