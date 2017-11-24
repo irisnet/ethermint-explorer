@@ -12,25 +12,25 @@ const wallet = Wallet.fromPrivateKey('0ce9f0b80483fbae111ac7df48527d443594a902b0
 const Service = require("../service");
 const service = new Service(web3);
 
-web3.eth.filter("pending").watch(
-  function(error,result){
-    if (!error) {
-      console.log('pending', result);
-    }
-  }
-);
+// web3.eth.filter("pending").watch(
+//   function (error, result) {
+//     if (!error) {
+//       console.log('pending', result);
+//     }
+//   }
+// );
 
 
-const i = 2;
-defineServiceTest(i);
-// let svcDef = service.getSvcDefDetailByCd('Code');
+const i = 3;
+// defineServiceTest(i);
+// let svcDef = service.getSvcDefDetailByCd('test01');
 // console.log(svcDef);
 // let svcDefList = service.getSvcDefList(2,1);
 // console.log(svcDefList);
 // bindServiceTest(i);
 // let svcBind = service.getSvcBind(i);
 // console.log(svcBind);
-// updateSvcBindTest(i);
+updateSvcBindTest(i);
 // svcBind = service.getSvcBind(i);
 // console.log(svcBind);
 
@@ -42,7 +42,7 @@ function defineServiceTest(i) {
   let github = "xxxx3";
   let definition = "xxxx1";
 
-  service.defineService(wallet, cd, name, desc, defType, definition, github,20000000000 ,4300000)
+  service.defineService(wallet, cd, name, desc, defType, definition, github, 20000000000, 4300000)
     .then(function (val) {
       console.log('val', val);
     }, function (error) {
@@ -71,7 +71,7 @@ function updateSvcBindTest(i) {
   let auth = "权限" + i;
   let fee = 100 + 1;
 
-  service.updateSvcBind(wallet, svcId, bindState, auth, fee)
+  service.updateSvcBind(wallet, svcId, bindState, auth, fee, 20000000000, 4300000)
     .then(function (val) {
       console.log('val', val);
     }, function (error) {
