@@ -1,8 +1,8 @@
 <template>
   <div>
     <myhead num="0"></myhead>
-    <div class="center recent_blocks block tx">
-      <div class="title">
+    <div class="center recent_blocks block tx" v-if='tx.hash'>
+      <div class="title" >
         {{$t('message.tx[0].title')}} {{tx.hash.substr(0, 7)}}...
       </div>
       <div class="block_list">
@@ -92,10 +92,19 @@
         });
       })
         .then(tx => {
-          tx.traces = [];
-          tx.failed = false;
-          tx.gasUsed = 0;
-          this.tx = tx;
+          new Promise((resolve, reject) => {
+            this.web3.eth.getTransactionReceipt(tx.hash, function(err, receipt){
+            resolve(receipt);
+          });
+          }).then(receipt => {
+            tx.traces = [];
+            tx.failed = false;
+            if(receipt){
+              tx.gasUsed = receipt.gasUsed;
+            }
+            this.tx = tx;
+            console.log(tx);
+          })
         })
         .catch(err => {
           console.log(err);

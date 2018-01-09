@@ -12,7 +12,7 @@ export const  message = {
       },
       {
         "txt": "Accounts",
-        "href": "/"
+        "href": "/accounts"
       },
       {
         "txt": "Pending Tx",
@@ -187,5 +187,14 @@ export const  message = {
         "Private Key"
       ]
     }
-  ]
+  ],
+  "accounts": {
+    "list": [
+      "账户",
+      "金额"
+    ],
+    "title": "节点账户",
+    "address": "账户",
+    "balance": "金额",
+  },
 }

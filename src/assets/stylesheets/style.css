@@ -32,6 +32,21 @@ body {
   right: 32px;
 }
 
+.all_accounts {
+  margin: 115px auto 15px auto;
+  background-color: #fff;
+  padding: 34px 30px 0 32px;
+  position: relative;
+  padding-bottom: 40px;
+}
+
+.all_accounts .title {
+  font-family: Helvetica;
+  font-size: 24px;
+  color: #212733;
+  padding-left: 6px;
+}
+
 /* 列表开始*/
 .title_list {
   margin-top: 15px;
@@ -117,6 +132,14 @@ a:hover {
 
 .recent_transactions .title_list_flex div:nth-child(3) {
   width: 430px;
+}
+
+.all_accounts .title_list_flex div:nth-child(1) {
+  width: 620px;
+}
+
+.all_accounts .title_list_flex div:nth-child(2) {
+  width: 620px;
 }
 
 .btnRed {

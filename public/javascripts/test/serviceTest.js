@@ -20,7 +20,8 @@ const service = new Service(web3);
 //   }
 // );
 
-
+var crypto = require('crypto');
+var a = crypto.randomBytes(32);
 const i = 3;
 // defineServiceTest(i);
 // let svcDef = service.getSvcDefDetailByCd('test01');
@@ -30,7 +31,7 @@ const i = 3;
 // bindServiceTest(i);
 // let svcBind = service.getSvcBind(i);
 // console.log(svcBind);
-updateSvcBindTest(i);
+// updateSvcBindTest(i);
 // svcBind = service.getSvcBind(i);
 // console.log(svcBind);
 

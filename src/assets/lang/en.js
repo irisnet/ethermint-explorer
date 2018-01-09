@@ -12,7 +12,7 @@ export const message = {
       },
       {
         "txt": "Accounts",
-        "href": "/"
+        "href": "/accounts"
       },
       {
         "txt": "Pending Tx",
@@ -188,5 +188,14 @@ export const message = {
         'Bind/Unbind'
       ]
     }
-  ]
+  ],
+  "accounts": {
+    "list": [
+      "Address",
+      "Balance"
+    ],
+    "title": "All Accounts",
+    "address": "Address",
+    "balance": "Balance",
+  },
 }

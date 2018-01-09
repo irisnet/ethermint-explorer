@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import index from '@/components/index'
 import block from '@/components/block'
 import tx from '@/components/tx'
+import accounts from '@/components/accounts'
 import service from '@/components/service'
 import service_detail from '@/components/service_detail'
 
@@ -35,6 +36,11 @@ export default new Router({
       path: '/service/detail/:number',
       name: 'service_detail',
       component: service_detail
+    },
+    {
+      path: '/accounts',
+      name: 'accounts',
+      component: accounts
     }
   ],
   scrollBehavior (to, from, savedPosition) {
