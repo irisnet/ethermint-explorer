@@ -196,5 +196,6 @@ export const  message = {
     "title": "节点账户",
     "address": "账户",
     "balance": "金额",
+    "account": "账户"
   },
 }

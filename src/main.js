@@ -18,6 +18,7 @@ import utilsConfig from './utils/config'
 import utilsNameformatter from './utils/nameformatter.js'
 import utilsService from '../public/javascripts/service.js'
 import wallet from '../public/javascripts/wallet.js'
+import axios from 'axios'
 
 var config = new (utilsConfig)();
 Vue.prototype.wallet = wallet;
@@ -25,6 +26,7 @@ Vue.prototype.nameformatter = new (utilsNameformatter)(config);
 Vue.prototype.moment = moment;
 Vue.prototype.ethformatter = ethformatter;
 Vue.prototype.numeral = numeral;
+Vue.prototype.axios = axios;
 
 import web3 from 'web3'
 
