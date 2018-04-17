@@ -8,10 +8,10 @@
       </div>
       <div v-for="item in accounts" class="title_list_warp title_list_flex">
         <div>
-          {{item.address}}
+          <router-link :to="'/account/'+item.address">{{item.address}}</router-link>
         </div>
         <div>
-          {{ethformatter(item.balance)}}
+          {{item.balance}} ETH
         </div>
       </div>
     </div>
@@ -21,7 +21,7 @@
 <script>
   import head from "./head";
   export default {
-    name: "index",
+    name: "accounts",
     components: {
       myhead: head
     },
@@ -31,14 +31,30 @@
       };
     },
     created: function () {
-      var accounts = this.web3.eth.accounts;
-      for (var k = 0, length = accounts.length; k < length; k++) {
-          var balance = this.web3.eth.getBalance(accounts[k]);
-          this.accounts[k] = {
-            address: accounts[k],
-            balance: balance
+    new Promise((resolve, reject) => {
+      this.axios.get('http://10.10.0.1:3434/account')
+        .then(function (res) {
+          var result = res.data;
+          resolve(result);
+        });
+      }).then(result =>{
+        new Promise((resolve, reject) => {
+          var accounts = [];
+          for (var k = 0, length = result.length; k < length; k++) {
+           var balance = 0;
+           if(result[k].balance){
+              balance = web3.toDecimal(result[k].balance);
+           }
+           accounts[k] = {
+             address: result[k]._id,
+             balance: balance
+           }
           }
-      }
+          resolve(accounts)
+        }).then(accounts => {
+          this.accounts = accounts
+        })
+      })
     }
   };
 </script>

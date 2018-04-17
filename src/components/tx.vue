@@ -26,13 +26,13 @@
       <div class="block_list">
         <div>{{$t('message.tx[0].list[3]')}}:</div>
         <div>
-          <router-link :to="'/block/'+tx.from">{{nameformatter.format(tx.from)}} </router-link>
+          <router-link :to="'/account/'+tx.from">{{nameformatter.format(tx.from)}} </router-link>
         </div>
       </div>
       <div class="block_list">
         <div>{{$t('message.tx[0].list[4]')}}:</div>
         <div>
-          <router-link v-if="tx.to" :to="'../account/'+tx.to">{{nameformatter.format(tx.to)}} </router-link>
+          <router-link v-if="tx.to" :to="'/account/'+tx.to">{{nameformatter.format(tx.to)}} </router-link>
           <section v-else>
             {{$t('message.tx[0].txt')}}
           </section>
@@ -40,7 +40,7 @@
       </div>
       <div class="block_list">
         <div>{{$t('message.tx[0].list[5]')}}:</div>
-        <div>{{ethformatter(tx.value)}}</div>
+        <div>{{ethformatter(tx.value)}} ({{parseInt(tx.value)}}Wei)</div>
       </div>
       <div class="block_list">
         <div>{{$t('message.tx[0].list[6]')}}:</div>
@@ -102,6 +102,8 @@
             if(receipt){
               tx.gasUsed = receipt.gasUsed;
             }
+            var value = tx.value;
+            console.log(parseInt(value));
             this.tx = tx;
             console.log(tx);
           })

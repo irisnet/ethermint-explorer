@@ -197,5 +197,6 @@ export const message = {
     "title": "All Accounts",
     "address": "Address",
     "balance": "Balance",
+    "account": "Account"
   },
 }
