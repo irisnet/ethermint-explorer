@@ -4,6 +4,7 @@ import index from '@/components/index'
 import block from '@/components/block'
 import tx from '@/components/tx'
 import accounts from '@/components/accounts'
+import account from '@/components/account'
 import service from '@/components/service'
 import service_detail from '@/components/service_detail'
 
@@ -41,6 +42,11 @@ export default new Router({
       path: '/accounts',
       name: 'accounts',
       component: accounts
+    },
+    {
+      path: '/account/:number',
+      name: 'account',
+      component: account
     }
   ],
   scrollBehavior (to, from, savedPosition) {
